@@ -1,0 +1,52 @@
+const express = require('express');
+const router = express.Router();
+const Todo = require('../models/todo');
+
+// GET all todo
+router.get('/', async (req, res) => {
+  const data = await Todo.getAll();
+  res.json(data);
+});
+
+// GET a specific todo
+router.get('/:id', (req, res) => {
+  const todo = Todo.getById(req.params.id);
+  if (todo) {
+    res.json(todo);
+  } else {
+    res.status(404).send('todo not found');
+  }
+});
+
+// POST a new todo
+router.post('/', async (req, res) => {
+  const { title, description } = req.body;
+  if (!title) {
+    return res.status(400).send('Title is required');
+  }
+  const newTodo = await Todo.create(title, description);
+  res.status(201).json(newTodo);
+});
+
+// PUT update a todo
+router.put('/:id', (req, res) => {
+  const { title, description, completed } = req.body;
+  const updatedTodo = Todo.update(req.params.id, { title, description, completed });
+  if (updatedTodo) {
+    res.json(updatedTodo);
+  } else {
+    res.status(404).send('todo not found');
+  }
+});
+
+// DELETE a todo
+router.delete('/:id', (req, res) => {
+  const success = Todo.delete(req.params.id);
+  if (success) {
+    res.status(204).send();
+  } else {
+    res.status(404).send('todo not found');
+  }
+});
+
+module.exports = router;
