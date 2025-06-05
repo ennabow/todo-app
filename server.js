@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const tasksRouter = require('./routes/todos');
 
 const app = express();
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -19,8 +20,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 module.exports = { app };

@@ -1,24 +1,29 @@
+const db = require("../db");
+
 class Todo {
-    static async connectDB(query) {
-        const mysql = require('mysql2/promise');
+    static async connectDB(operation, query) {
+        return new Promise((resolve, reject) => {
+            let data;
+            try {
+                db[operation](query, [], (err, rows) => {
 
-        async function connect() {
-            const conn = await mysql.createConnection({
-                host: 'localhost',
-                user: 'admin',
-                password: 'Smorodina14*50',
-                database: 'todoDB'
-            });
-            const [rows] = await conn.query(query);
-            await conn.end();
-            return rows;
-        }
+                if (err) {
+                    console.log('select all is fail', err)
+                }
 
-        return await connect();
+                data = rows;
+                resolve(rows)
+            }) } catch (e) {
+                reject(e)
+                return e;
+            }
+            return data;
+        })
+        
     }
 
     static async getAll() {
-        return this.connectDB('SELECT * FROM todo');
+        return this.connectDB('all', 'SELECT * FROM todo');
     }
 
     static getById(id) {
@@ -26,7 +31,7 @@ class Todo {
     }
 
     static async create(title, description) {
-        return this.connectDB(`INSERT INTO todo (title, description) VALUES('${title}', '${description}')`)              
+        return this.connectDB('run', `INSERT INTO todo (title, description) VALUES('${title}', '${description}')`)              
     }
 
     static async update(id, updates) {

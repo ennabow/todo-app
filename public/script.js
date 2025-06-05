@@ -43,7 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load Todos from API
   async function loadTodos() {
     try {
-      const response = await fetch('/api/todos');
+      const response = await fetch('/api/todos', {
+        method: 'GET',
+         headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const todos = await response.json();
       renderTodos(todos);
     } catch (err) {
@@ -52,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Render Todos to the page
-  function renderTodos(todos) {
+  async function renderTodos(todos) {
     todosList.innerHTML = '';
     todos.forEach(todo => {
       const li = document.createElement('li');

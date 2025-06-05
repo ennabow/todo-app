@@ -5,7 +5,8 @@ const Todo = require('../models/todo');
 // GET all todo
 router.get('/', async (req, res) => {
   const data = await Todo.getAll();
-  res.json(data);
+  const content = JSON.stringify(data)
+  res.send(content);
 });
 
 // GET a specific todo
@@ -35,7 +36,9 @@ router.post('/', async (req, res) => {
 
   if (isValidParams) {
     const newTodo = await Todo.create(title, description);
-    res.status(201).json(newTodo);
+    const content = JSON.stringify(newTodo);
+    res.status(201)
+    res.send(content);
   } else {
     console.log('try add incorrect record params', { title, description })
     return res.status(400).send('Title and description is required');
