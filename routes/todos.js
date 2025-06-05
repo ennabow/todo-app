@@ -21,11 +21,26 @@ router.get('/:id', (req, res) => {
 // POST a new todo
 router.post('/', async (req, res) => {
   const { title, description } = req.body;
-  if (!title) {
-    return res.status(400).send('Title is required');
+
+  const validate = () => {
+    if (!title || !description) {
+      return false;
+    } else if (title.length == 0 || description.length == 0){
+      return false;
+    } else if (typeof title !== 'string' || typeof description !== 'string') {
+      return false
+    } else return true
   }
-  const newTodo = await Todo.create(title, description);
-  res.status(201).json(newTodo);
+  const isValidParams = validate();
+
+  if (isValidParams) {
+    const newTodo = await Todo.create(title, description);
+    res.status(201).json(newTodo);
+  } else {
+    console.log('try add incorrect record params', { title, description })
+    return res.status(400).send('Title and description is required');
+  }
+  
 });
 
 // PUT update a todo

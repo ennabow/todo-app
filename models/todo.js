@@ -25,7 +25,7 @@ class Todo {
         return this.connectDB(`SELECT * FROM todo WHERE id - ${id}`);
     }
 
-    static async create(title, description = '') {
+    static async create(title, description) {
         return this.connectDB(`INSERT INTO todo (title, description) VALUES('${title}', '${description}')`)              
     }
 
