@@ -4,6 +4,7 @@ const Todo = require('../models/todo');
 
 // GET all todo
 router.get('/', async (req, res) => {
+  console.log('req', req)
   const data = await Todo.getAll();
   const content = JSON.stringify(data)
   res.send(content);
