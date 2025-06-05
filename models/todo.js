@@ -2,7 +2,8 @@ const db = require("../db");
 
 class Todo {
     static async connectDB(operation, query) {
-        return new Promise((resolve, reject) => {
+        try {
+            return new Promise((resolve, reject) => {
             let data;
             try {
                 db[operation](query, [], (err, rows) => {
@@ -19,6 +20,11 @@ class Todo {
             }
             return data;
         })
+        } catch(e) {
+            console.error('Database connection error:', err);
+            process.exit(1); // Завершаем процесс при ошибке подключения
+        }
+        
         
     }
 
